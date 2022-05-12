@@ -5,6 +5,11 @@ import Newsletter from "../components/Newsletter"
 import Footer from "../components/Footer"
 import { Add, Remove } from "@mui/icons-material"
 import { mobile } from "../responsive"
+import { useParams} from "react-router-dom"
+import { useEffect, useState } from "react"
+import { publicRequest } from "../requestMethods"
+import { addProduct } from "../redux/cartRedux"
+import { useDispatch } from "react-redux"
 const Container =styled.div``
 const Wrapper =styled.div`
 padding: 50px;
@@ -110,50 +115,78 @@ transition: all 0.5s ease;
 }
 `
 const Product = () => {
+  const {id}=useParams();
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const dispatch=useDispatch();
+  console.log(id);
+  useEffect(() => {
+   const getProduct=async()=>{
+     try {
+       const res =await publicRequest.get(`/products/find/${id}`)
+       setProduct(res.data)
+       
+     } catch (error) {
+       console.error(error);
+     }
+     
+    }
+    getProduct();
+  }, [id]);
+
+  const handleClick=()=>{
+    dispatch(addProduct({...product,quantity,color,size}))
+  }
   return (
     <Container>
         <Navbar/>
         <Announcement/>
         <Wrapper>
+        
             <ImgContainer>
-            <Image src="https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png" />
+            <Image src={product.img} />
             </ImgContainer>
             <InfoContainer>
-                <Title>Denim Jumpsuit</Title>
-                <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.</Desc>
-            <Price>$ 20</Price>
+                <Title>{product.title}</Title>
+                <Desc>{product.desc}</Desc>
+            <Price>$ {product.price}</Price>
             <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
+              {
+                product.color && product.color.map(c=>(<FilterColor color={c}
+                   key={c} onClick={()=>setColor(c)}/>))
+              }
+              {/* {product.color} */}
+              {/* <FilterColor color="black" />
               <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
+            <FilterColor color="gray" /> */}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
+              <FilterSize onChange={(e)=>setSize(e.target.value)}>
+              {
+                product.size && product.size.map(s=>(<FilterSizeOption key={s}>{s}</FilterSizeOption>))
+                
+              }
+                {/* <FilterSizeOption>S</FilterSizeOption>
                 <FilterSizeOption>M</FilterSizeOption>
                 <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
-              </FilterSize>
+                <FilterSizeOption>XL</FilterSizeOption>*/}
+              </FilterSize> 
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
+              <Remove onClick={()=>setQuantity(quantity <=0 ? 0:quantity-1)} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={()=>setQuantity(quantity+1)} />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={handleClick}>ADD TO CART</Button>
           </AddContainer>
             </InfoContainer>
-            
         </Wrapper>
         <Newsletter/>
         <Footer/>

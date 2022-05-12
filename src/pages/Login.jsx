@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 import { mobile } from '../responsive'
 
@@ -57,6 +58,8 @@ cursor: pointer;
 `
 
 const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <Container>
         <Wrapper>
