@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
 import Badge from '@mui/material/Badge';
-import { ShoppingCartOutlined } from '@mui/icons-material';
+import { ShoppingCartOutlined,} from '@mui/icons-material';
 import {mobile} from "../responsive"
 import {useSelector} from "react-redux"
 import { Link } from 'react-router-dom';
@@ -62,6 +62,14 @@ cursor:pointer;
 margin-left:25px;
 ${mobile({fontSize:"12px",marginLeft:"10px"})}
 `
+const NavLink = styled(Link)`
+  text-decoration: none;
+  color: #404040;
+
+  &:focus, &:hover, &:visited, &:link, &:active {
+    text-decoration: none;
+  }
+`;
 const Navbar = () => {
   const quantity=useSelector(state=>state.cart.quantity)
 
@@ -77,11 +85,11 @@ const Navbar = () => {
             </Left>
             <Center><Logo>HishaM.</Logo></Center>
             <Right>
-                <MenuItem>Register</MenuItem>
-                <MenuItem>LOGIN</MenuItem>
+                <MenuItem><NavLink to={"/register"}>Register</NavLink></MenuItem>
+                <MenuItem><NavLink to={"/login"}>Login</NavLink></MenuItem>
                 <Link to="/cart">
                 <MenuItem>
-                
+
                 <Badge badgeContent={quantity} color="primary">
       <ShoppingCartOutlined color="action" />
     </Badge>
