@@ -1,10 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-
 const userSlice=createSlice({
     name:'user',
     initialState:{
-        currentUser:null,
+        currentUser:localStorage.getItem('jwtToken')|| null,
         isFetching:false,
         error:false
     },
@@ -14,6 +13,7 @@ const userSlice=createSlice({
        },
        loginSuccess:(state,action)=>{
            state.isFetching=false;
+           localStorage.setItem('jwtToken',JSON.stringify(action.payload))
            state.currentUser=action.payload
         },
         loginFailure:(state)=>{

@@ -71,9 +71,10 @@ const NavLink = styled(Link)`
   }
 `;
 const Navbar = () => {
-  const quantity=useSelector(state=>state.cart.quantity)
+  const quantity=useSelector(state=>state.cart.quantity);
+    const user=useSelector(state => state.user.currentUser)
 
-  return (
+    return (
     <Container>
         <Wrapper>
             <Left>
@@ -85,16 +86,21 @@ const Navbar = () => {
             </Left>
             <Center><Logo>HishaM.</Logo></Center>
             <Right>
-                <MenuItem><NavLink to={"/register"}>Register</NavLink></MenuItem>
-                <MenuItem><NavLink to={"/login"}>Login</NavLink></MenuItem>
-                <Link to="/cart">
-                <MenuItem>
+                {user ? (<><MenuItem><NavLink to={"/register"}>Logout</NavLink></MenuItem>
+                    <Link to="/cart">
+                        <MenuItem>
 
-                <Badge badgeContent={quantity} color="primary">
-      <ShoppingCartOutlined color="action" />
-    </Badge>
-                </MenuItem>
-                </Link>
+                            <Badge badgeContent={quantity} color="primary">
+                                <ShoppingCartOutlined color="action" />
+                            </Badge>
+                        </MenuItem>
+                    </Link>
+                </>)
+                :
+                    (<><MenuItem><NavLink to={"/register"}>Register</NavLink></MenuItem>
+                    <MenuItem><NavLink to={"/login"}>Login</NavLink></MenuItem></>)
+                }
+
     </Right>
         </Wrapper>
     </Container>

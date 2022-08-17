@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import { mobile } from '../responsive'
-
+import {login} from '../redux/apiCall'
+import {useDispatch} from 'react-redux'
 const Container =styled.div`
 width: 100vw;
 height: 100vh;
@@ -60,14 +61,20 @@ cursor: pointer;
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch=useDispatch();
+  const submitHandler= async (e)=>{
+      e.preventDefault()
+      console.log(username,password)
+      await login(dispatch,{username,password})
+  }
   return (
     <Container>
         <Wrapper>
             <Title>CREATE AN ACCOUNT</Title>
             <From>
-                <Input placeholder="username"/>
-                <Input placeholder="password"/>
-                <Button>LOGIN</Button>   
+                <Input onChange={(e)=>setUsername(e.target.value)} placeholder="username"/>
+                <Input onChange={(e)=>setPassword(e.target.value)} placeholder="password"/>
+                <Button onClick={submitHandler}>LOGIN</Button>
                 <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link> 
                 <Link>CREATE A NEW ACCOUNT</Link> 
             </From>
