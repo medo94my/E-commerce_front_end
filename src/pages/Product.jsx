@@ -21,7 +21,7 @@ flex:1;`
 const Image =styled.img`
 width: 100%;
 height: 90vh;
-object-fit: cover;
+object-fit: contain;
 ${mobile({height:"40vh"})}
 `
 const InfoContainer =styled.div`
@@ -65,6 +65,7 @@ width: 20px;
 height: 20px;
 border-radius:50%;
 background-color: ${props=>props.color};
+  border: none;
 margin: 0 5px;
 cursor: pointer;
 `
@@ -126,6 +127,8 @@ const Product = () => {
    const getProduct=async()=>{
      try {
        const res =await publicRequest.get(`/products/find/${id}`)
+         setSize(res.data.size[0])
+         setColor(res.data.color[0])
        setProduct(res.data)
        
      } catch (error) {
@@ -137,6 +140,10 @@ const Product = () => {
   }, [id]);
 
   const handleClick=()=>{
+      console.log(color,size)
+      if (!color&&!size){
+          alert('you did not choose color or size please select one or both to continue ')
+      }
     dispatch(addProduct({...product,quantity,color,size}))
   }
   return (
@@ -157,7 +164,7 @@ const Product = () => {
               <FilterTitle>Color</FilterTitle>
               {
                 product.color && product.color.map(c=>(<FilterColor color={c}
-                   key={c} onClick={()=>setColor(c)}/>))
+                   key={c} onClick={()=>setColor(c)} />))
               }
               {/* {product.color} */}
               {/* <FilterColor color="black" />
@@ -168,7 +175,7 @@ const Product = () => {
               <FilterTitle>Size</FilterTitle>
               <FilterSize onChange={(e)=>setSize(e.target.value)}>
               {
-                product.size && product.size.map(s=>(<FilterSizeOption key={s}>{s}</FilterSizeOption>))
+                product.size && product.size.map(s=>(<FilterSizeOption key={s} value={s} >{s}</FilterSizeOption>))
                 
               }
                 {/* <FilterSizeOption>S</FilterSizeOption>

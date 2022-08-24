@@ -135,6 +135,7 @@ font-weight:600;
 const Cart = () => {
   const history =useHistory();
   const cart = useSelector(state=>state.cart)
+  const [quantity, setQuantity] = useState(cart.products);
   const [stripeToken, setStripeToken] = useState(null);
   const onToken=(token)=>{
     setStripeToken(token)
@@ -171,8 +172,8 @@ useEffect(() => {
           </Top>
           <Bottom>
             <Info>
-              {cart.products?.map(product=>(<Product>
-                <ProductDetail key={product._id}>
+              {cart.products?.map(product=>(product.quantity>0)&&(<Product key={product._id}>
+                <ProductDetail >
                   <Image src={product.img}/>
                   <Details>
                     <ProductName>
@@ -192,11 +193,11 @@ useEffect(() => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add/>
+                    <Remove />
                     <ProductAmount>
                       {product.quantity}
                     </ProductAmount>
-                    <Remove/>
+                    <Add />
                   </ProductAmountContainer>
                   <ProductPrice>${product.price *product.quantity}</ProductPrice>
                 </PriceDetail>

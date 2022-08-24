@@ -9,7 +9,7 @@ height: 100%;
 position: absolute;
 top:0;
 left:0;
-background-color: rgba(0,0,0,0.2);
+background-color: rgba(0,0,0,0.1);
 z-index: 3;
 display: flex;
 align-items: center;
@@ -18,18 +18,19 @@ transition: all 0.5s ease;
 cursor: pointer;
 `
 const Container=styled.div`
-  flex:1;
-  margin: 5px;  
+  flex: 1;
+  margin: 5px;
   min-width: 280px;
   height: 350px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color:#f5fbfd ;
+  background-color: #ffffff;
   position: relative;
-  &:hover ${Info}{
+
+  &:hover ${Info} {
     opacity: 1;
-  
+
   }
 `
 
@@ -61,6 +62,16 @@ margin: 10px;
 }
 
 `
+const NavLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:focus, &:hover, &:visited, &:link, &:active {
+    text-decoration: none;
+  }
+`;
 const Product = ({item}) => {
   return (
     <Container>
@@ -71,9 +82,9 @@ const Product = ({item}) => {
           <ShoppingCartOutlined/>
         </Icon>
         <Icon>
-          <Link to={`/product/${item._id}`}>
+          <NavLink to={`/product/${item._id}`}>
           <SearchOutlined/>
-          </Link>
+          </NavLink>
         </Icon>
         <Icon>
           <FavoriteBorderOutlined/>
